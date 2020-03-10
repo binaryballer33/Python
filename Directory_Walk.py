@@ -1,6 +1,6 @@
 import os
 
-for folderName, subFolders, fileNames in os.walk('C:\\Users\\Shaquille Mandy\\Desktop\\'):
+for folderName, subFolders, fileNames in os.walk('/Users/shaq/PycharmProjects/Python'):
     print("The folder is " + folderName)
     print()
     print("These are the subfolders in " + folderName)
