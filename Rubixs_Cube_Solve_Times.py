@@ -7,7 +7,6 @@ import datetime
 
 
 def rubix_cube_stats(solve_times, date=datetime.datetime.today()):
-    import datetime
     import statistics
     """
     Expects a list of rubix cube solve times for the parameter solve_times
