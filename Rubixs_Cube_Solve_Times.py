@@ -49,7 +49,17 @@ def rubix_cube_stats(solve_times, date=datetime.datetime.today()):
     print(), print(), print()
 
 
+def random_list_generator(): # generates a random list
+    import random
+    random_list = []
+    for number in range(1, 31):
+        random_list.append(random.randint(16, 24))
+    print("Random List:",random_list)
+    return random_list
+
+
+rubix_cube_stats(random_list_generator())
+
 solves = [19, 16, 24, 18, 19, 20, 21, 24, 20, 17, 16, 20, 19, 23, 19, 22, 17, 16, 17, 20, 19, 18, 21, 17, 23, 17, 20, 17, 22, 19]
 rubix_cube_stats(solves)
-
 
