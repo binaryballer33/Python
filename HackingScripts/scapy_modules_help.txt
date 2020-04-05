@@ -1,0 +1,19 @@
+The url for the answer to the scapy import question is: 
+https://stackoverflow.com/questions/45691654/unresolved-reference-with-scapy/53402404
+
+This is a PyCharm issue. Scapy uses dynamic loading (using importlib) to load many modules / custom modules, that pycharm does not detect. This allows the users to select which layers they want to have loaded.
+
+The workaround is to import whatever you need from their related scapy file, without using all. It is cleaner but longer to do. Or you can use "add an exception" in your IDE, if you’re not looking for something clean.
+
+Here are a few useful modules
+
+scapy.layers.inet where you can get IP, TCP..
+scapy.layers.inet6
+scapy.layers.dns
+scapy.sendrecv has srp, sr, sr1, sendp, send...
+scapy.supersocket to directly access scapy’s sockets
+scapy.layers.l2 which has Ether, ARP..
+scapy.layers.dot11 for 802.11 stuff
+scapy.utils for wrpcap, rdpcap...
+scapy.config for the conf object (which has properties such as conf.route or conf.route6)
+What I advise to do is to open the Scapy shell (or import from scapy.all import * in a console) and check from which module a layer/function is by using help(...)
