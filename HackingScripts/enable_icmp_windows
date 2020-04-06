@@ -1,0 +1,12 @@
+This will help in setting up the lab so that kali and windows can talk to one another instead of windows just being able to talk to kali
+
+
+https://superuser.com/questions/1088651/kali-vm-not-pinging-windows-7-vm-but-vice-versa-is-possible
+
+Open up the Windows Firewall from within the Control Panel or search for it.
+Click Advanced Settings on the left.
+From the left pane of the resulting window, click Inbound Rules.
+In the right pane, find the rules titled File and Printer Sharing (Echo Request - ICMPv4-In).
+Right-click each rule and choose Enable Rule
+
+
