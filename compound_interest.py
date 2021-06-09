@@ -1,13 +1,6 @@
 # This is a application that will calculate compound interest over a certain amount of time
 from termcolor import colored
 
-# THE USER INPUTED VARIABLES
-# starting_capital_user_inputed = input("What is your Starting Capital? ")
-# monthly_contribution_user_inputed = input("What is your Monthly Contribution? ")
-# time_frame_for_investment_user_inputed = input("How Many Years do you want to invest your money? ")
-# weekly_rate_of_return_user_inputed = input("Please enter your rate of return: ")
-# tax_rate_user_inputed = input("Please enter you projected tax rate: ")
-
 starting_capital = 10000
 monthly_contribution = 1000
 current_capital = starting_capital
