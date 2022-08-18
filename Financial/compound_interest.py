@@ -1,34 +1,32 @@
 #!/usr/bin/python3
+"""
+This is an application that will calculate compound interest over a certain amount of time
+given certain interest rates, starting amounts, weekly rate of returns and your tax rate.
+I could use A = P(1 + r/n)^(nt) for the compound interest
+But that would be no fun, I wouldn't be able to customize the application the way I wanted to
+also I didn't think about it before I coded this :)
 
-# This is an application that will calculate compound interest over a certain amount of time
-# given certain interest rates, starting amounts, weekly rate of returns and your tax rate.
-# I could use A = P(1 + r/n)^(nt) for the compound interest
-# But that would be no fun, I wouldn't be able to customize the application the way I wanted to
-# also I didn't think about it before I coded this :)
+Calculator I used to verify my numbers:
+    - according to https://www.thecalculatorsite.com/finance/calculators/compoundinterestcalculator.php
+"""
 
 # *****************UPDATE************************
 # add a Total Profits for the year up to this Month variable: will probably be placed in the compound_monthly function
-
-# convert this check below into a function
-# if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
-#     print(f"\nStarting Capital = ${int(start_of_the_year_capital):,d}")
-#     print(f"Monthly Additional Contribution = ${monthly_contribution:,d}")
-
 # Need to implement Error handling throughout the script
-# get program to write data to a csv or docx file
 # currently when using monthly contributions at the start of month there is a 2%-2.5% error in the calculation
 # according to https://www.thecalculatorsite.com/finance/calculators/compoundinterestcalculator.php
 
 from termcolor import colored
 
 
-def brief_summary(years, net_realized_gains, total_capital, initial_investment_for_brief_summary,
+def brief_summary(financial_report, years, net_realized_gains, total_capital, initial_investment_for_brief_summary,
                   each_percentage_weekly_rate_of_return, monthly_contribution, tax_rate):
     """
     Displays a less detailed Summary report of your investments, Displays these values:
     Initial Investment, Additional Monthly Contribution, Weekly Rate Of Return, Tax Rate,
     Net Investment, Total Contributions To Date, Rate of Return over the time period of your investment
 
+    :param financial_report: File object that this program will be appending text to
     :param years: integer value that represents how many years you invested the money
     :param net_realized_gains: int value for the net profits at the end of the investment period
     :param total_capital: int value for the total amount of money that you contributed over the length of the investment
@@ -39,21 +37,20 @@ def brief_summary(years, net_realized_gains, total_capital, initial_investment_f
     :return: None
 
 
-                        Example Output:
-                        **********NET SUMMARY************************
-                            Initial Investment: $1,000
-                            Additional Monthly Contribution: $1,000
-                            Weekly Rate Of Return: 1.5%
-                            Tax Rate: 37.0%
-                            Net Investment: $289,233
-                            Total Contributions To Date: $61,000
-                            289,233 / 61,000 = (4.74X Return)
-                        **********NET SUMMARY************************
+                    Example Output:
+                    **********NET SUMMARY************************
+                        Initial Investment: $1,000
+                        Additional Monthly Contribution: $1,000
+                        Weekly Rate Of Return: 1.5%
+                        Tax Rate: 37.0%
+                        Net Investment: $289,233
+                        Total Contributions To Date: $61,000
+                        289,233 / 61,000 = (4.74X Return)
+                    **********NET SUMMARY************************
     """
 
     # Prints the Net Summary Report information for the year
-    print()
-    print(f"Printing Summary Report For Year {years + 1}")
+    print(f"\nPrinting Summary Report For Year {years + 1}")
     print("**********NET SUMMARY************************")
     print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
@@ -62,16 +59,32 @@ def brief_summary(years, net_realized_gains, total_capital, initial_investment_f
     print(f"{colored('Net Investment:', 'green')} ${int(net_realized_gains):,d}")
     print(f"Total Contributions To Date: ${total_capital:,d}")
     print(f"{int(net_realized_gains):,d} / {total_capital:,d} = "
-          f"({round(net_realized_gains / total_capital, 2)}X Return)")
+          f"({round(net_realized_gains / total_capital, 2)}X Return)"
+    )
     print("**********NET SUMMARY************************")
 
+    # write all of this output to the financial_investments_report_brief.txt file
+    financial_report.write(f"\n\nPrinting Summary Report For Year {years + 1}")
+    financial_report.write("\n**********NET SUMMARY************************")
+    financial_report.write(f"\nInitial Investment: ${initial_investment_for_brief_summary:,d}")
+    financial_report.write(f"\nAdditional Monthly Contribution: ${monthly_contribution:,d}")
+    financial_report.write(f"\nWeekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%")
+    financial_report.write(f"\nTax Rate: {tax_rate}%")
+    financial_report.write(f"\nNet Investment: ${int(net_realized_gains):,d}")
+    financial_report.write(f"\nTotal Contributions To Date: ${total_capital:,d}")
+    financial_report.write(f"\n{int(net_realized_gains):,d} / {total_capital:,d} = "
+                           f"({round(net_realized_gains / total_capital, 2)}X Return)"
+    )
+    financial_report.write("\n**********NET SUMMARY************************")
 
-def summary(years, start_of_the_year_capital, total_capital, net_realized_gains, tax_rate, ending_capital,
-            total_profits_current_year, tax_amount, total_profits_all_time, initial_investment_for_brief_summary,
-            each_percentage_weekly_rate_of_return, monthly_contribution):
+
+def summary(financial_report, years, start_of_the_year_capital, total_capital, net_realized_gains, tax_rate,
+            ending_capital, total_profits_current_year, tax_amount, total_profits_all_time,
+            initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return, monthly_contribution):
     """
     Display a Summary report of your investments, takes in the variable as parameters from your compound() function
 
+    :param financial_report: File object that this program will be appending text to
     :param years: integer value that represents how many years you invested the money
     :param start_of_the_year_capital: int value that shows the amount of money you have at the start of the current year
     :param total_capital: int value for the total amount of money that you contributed over the length of the investment
@@ -113,20 +126,33 @@ def summary(years, start_of_the_year_capital, total_capital, net_realized_gains,
     ******************************EXAMPLE OUTPUT*****************************
     """
 
-    print()
-    print(f"Printing Summary Report For Year {years + 1}")
     # Prints the Gross Summary information for the year
+    print(f"\nPrinting Summary Report For Year {years + 1}")
     print("**********GROSS SUMMARY**********************")
     print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
-    print(f"Start of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}")
+    print(f"Start Of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
     print(f"Weekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%")
-    print(f"{colored('Profits for the Year: ', 'green')}${int(total_profits_current_year):,d}")
+    print(f"{colored('Profits For The Year: ', 'green')}${int(total_profits_current_year):,d}")
     print(f"{colored('Ending Investment: ', 'green')}${int(ending_capital):,d}")
     print(f"${round(ending_capital):,d} / ${round(total_capital):,d} = "
           f"{round(ending_capital / total_capital, 2)}X Return")
-    print("**********GROSS SUMMARY**********************")
-    print()
+    print("**********GROSS SUMMARY**********************\n")
+
+    # write all the Gross Summary Information to the financial_investments_report_detailed.txt file
+    financial_report.write(f"\n\nPrinting Summary Report For Year {years + 1}")
+    financial_report.write("\n**********GROSS SUMMARY**********************")
+    financial_report.write(f"\nInitial Investment: ${initial_investment_for_brief_summary:,d}")
+    financial_report.write(f"\nStart Of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}")
+    financial_report.write(f"\nAdditional Monthly Contribution: ${monthly_contribution:,d}")
+    financial_report.write(f"\nWeekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%")
+    financial_report.write(f"\nProfits for The Year: ${int(total_profits_current_year):,d}")
+    financial_report.write(f"\nEnding Investment: ${int(ending_capital):,d}")
+    financial_report.write(
+        f"\n${round(ending_capital):,d} / ${round(total_capital):,d} = "
+        f"{round(ending_capital / total_capital, 2)}X Return"
+    )
+    financial_report.write("\n**********GROSS SUMMARY**********************\n")
 
     # Prints the Net Summary information for the year
     print("**********NET SUMMARY************************")
@@ -140,12 +166,26 @@ def summary(years, start_of_the_year_capital, total_capital, net_realized_gains,
           f" {round(net_realized_gains / total_capital, 2)}X Return")
     print("**********NET SUMMARY************************")
 
+    # write all the Net Summary Information to the financial_investments_report_detailed.txt file
+    financial_report.write("\n**********NET SUMMARY************************")
+    financial_report.write(f"\nTax Rate: {tax_rate}%")
+    financial_report.write(f"\nTax Amount Due: ${round(tax_amount):,d}")
+    financial_report.write(f"\nNet Investment: ${int(net_realized_gains):,d}")
+    financial_report.write(f"\nTotal Contributions To Date: ${total_capital:,d}")
+    financial_report.write(f"\nProfits for the Year: ${round(total_profits_current_year - tax_amount):,d}")
+    financial_report.write(
+        f"\n{int(net_realized_gains):,d} / {total_capital:,d} = "
+        f" {round(net_realized_gains / total_capital, 2)}X Return"
+    )
+    financial_report.write("\n**********NET SUMMARY************************")
 
-def compound_weekly(current_capital, weekly_profits_of_the_month, weekly_rate_of_return, brief_or_detailed):
 
+def compound_weekly(financial_report, current_capital, weekly_profits_of_the_month,
+                    weekly_rate_of_return, brief_or_detailed):
     """
     This function calculates the interest on a weekly basis and feeds that information to function compound_monthly()
 
+    :param financial_report: File object that this program will be appending text to
     :param current_capital: the current capital amount that you have at this very moment. It increases each week
     :param weekly_profits_of_the_month: a list of the profits for each week of the month
     :param weekly_rate_of_return: Enter a float value for your weekly rate of return
@@ -161,6 +201,10 @@ def compound_weekly(current_capital, weekly_profits_of_the_month, weekly_rate_of
         if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
             print(f"Start of Week {each_week + 1}: ${round(current_capital):,d} [+] Profits: "
                   f"${int(weekly_profits_of_the_month[each_week]):,d} ")
+            financial_report.write(
+                f"\nStart of Week {each_week + 1}: ${round(current_capital):,d} [+] Profits: "
+                f"${int(weekly_profits_of_the_month[each_week]):,d} "
+            )
 
         # changes current_capital so that it add the current weeks profits to the current capital amount
         current_capital = current_capital * (1 + weekly_rate_of_return)
@@ -174,15 +218,18 @@ def compound_weekly(current_capital, weekly_profits_of_the_month, weekly_rate_of
     if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
         print(f"Total Profits for the Month: ${monthly_profits_total:,d}")
         print(f"{colored('End of Month:', 'green')} ${int(current_capital):,d}")
+        financial_report.write(f"\nTotal Profits for the Month: ${monthly_profits_total:,d}")
+        financial_report.write(f"\nEnd of Month: ${int(current_capital):,d}")
 
     return current_capital
 
 
-def compound_monthly(current_capital, monthly_contribution, brief_or_detailed, months_of_the_year,
+def compound_monthly(financial_report, current_capital, monthly_contribution, brief_or_detailed, months_of_the_year,
                      years, weekly_rate_of_return):
     """
     compound_monthly function will run for each month in the year that you want to invest your money
 
+    :param financial_report: File object that this program will be appending text to
     :param current_capital: integer value this is the current capital amount that will be constantly changed
     :param monthly_contribution: integer value that represents monthly contribution to investment
     :param brief_or_detailed: string value will be used throughout the script to determine what summary report to print
@@ -198,32 +245,36 @@ def compound_monthly(current_capital, monthly_contribution, brief_or_detailed, m
         if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
             print(f"\n\t\tYEAR {years + 1} {each_month.upper()}")
             print(f"Adding Monthly Contribution: [+] ${monthly_contribution:,d}")
+            financial_report.write(f"\n\n\t\tYEAR {years + 1} {each_month.upper()}")
+            financial_report.write(f"\nAdding Monthly Contribution: [+] ${monthly_contribution:,d}")
 
         # resets the value for the weekly profits for the current month
         weekly_profits_of_the_month = []
 
         # This function calculates the interest on a weekly basis
-        current_capital = compound_weekly(current_capital, weekly_profits_of_the_month,
+        current_capital = compound_weekly(financial_report, current_capital, weekly_profits_of_the_month,
                                           weekly_rate_of_return, brief_or_detailed)
 
     if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
         # compound_weekly needs to be called once here so that I can get the extra 4 weeks
         # without this it will only be 48 weeks, but I need it to be 52 weeks
         print(f"\n\t\tExtra 4 Weeks Of Year {years + 1}")
+        financial_report.write(f"\n\n\t\tExtra 4 Weeks Of Year {years + 1}")
+
     weekly_profits_of_the_month = []
-    current_capital = compound_weekly(current_capital, weekly_profits_of_the_month,
+    current_capital = compound_weekly(financial_report, current_capital, weekly_profits_of_the_month,
                                       weekly_rate_of_return, brief_or_detailed)
 
     return current_capital
 
 
-def compound_yearly(time_frame_for_investment, current_capital, tax_amount, brief_or_detailed,
+def compound_yearly(financial_report, time_frame_for_investment, current_capital, tax_amount, brief_or_detailed,
                     monthly_contribution, weekly_rate_of_return, initial_investment_for_brief_summary,
-                    tax_rate, each_percentage_weekly_rate_of_return):
-
+                    tax_rate, each_percentage_weekly_rate_of_return, ):
     """
     compound_yearly function will run for each year that you want to invest your money
 
+    :param financial_report: File object that this program will be appending text to
     :param time_frame_for_investment: integer value that determines how many years you will invest your money
     :param current_capital: integer value this is the current capital amount that will be constantly changed
     :param tax_amount: int value that stores the value of the tax amount due at the end of each year
@@ -248,8 +299,10 @@ def compound_yearly(time_frame_for_investment, current_capital, tax_amount, brie
         if brief_or_detailed == 'detailed' or brief_or_detailed == 'd':
             print(f"\nStarting Capital = ${int(start_of_the_year_capital):,d}")
             print(f"Monthly Additional Contribution = ${monthly_contribution:,d}")
+            financial_report.write(f"\n\nStarting Capital = ${int(start_of_the_year_capital):,d}")
+            financial_report.write(f"\nMonthly Additional Contribution = ${monthly_contribution:,d}")
 
-        current_capital = compound_monthly(current_capital, monthly_contribution, brief_or_detailed,
+        current_capital = compound_monthly(financial_report, current_capital, monthly_contribution, brief_or_detailed,
                                            months_of_the_year, years, weekly_rate_of_return)
 
         # total profits for the current year
@@ -269,24 +322,25 @@ def compound_yearly(time_frame_for_investment, current_capital, tax_amount, brie
 
         # Prints the brief summary report at the end of the time frame you selected to invest your money
         if (years + 1) == time_frame_for_investment and brief_or_detailed != 'detailed' and brief_or_detailed != 'd':
-            brief_summary(years, net_realized_gains, total_capital, initial_investment_for_brief_summary,
-                          each_percentage_weekly_rate_of_return, monthly_contribution, tax_rate)
+            brief_summary(financial_report, years, net_realized_gains, total_capital,
+                          initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return,
+                          monthly_contribution, tax_rate)
         elif brief_or_detailed != 'detailed' and brief_or_detailed != 'd':
             pass
         # Prints the detailed summary for the year, displays gross and net information for that year
         else:
-            summary(years, start_of_the_year_capital, total_capital, net_realized_gains, tax_rate,
+            summary(financial_report, years, start_of_the_year_capital, total_capital, net_realized_gains, tax_rate,
                     ending_capital, total_profits_current_year, tax_amount, total_profits_all_time,
                     initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return, monthly_contribution)
 
 
-def compound(brief_or_detailed, *initial_investment_amounts):
-
+def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
     """
     This function will figure out how much money you will make after a certain amount of time, will take into
     consideration how much money you started with and your interest rate every week, etc
 
     :param brief_or_detailed: string val that print brief summary or long summary, prints long summary by default
+    :param financial_report: File object that this program will be appending text to
     :param initial_investment_amounts: int list consisting of initial starting capitals
     :return: None
     """
@@ -294,20 +348,24 @@ def compound(brief_or_detailed, *initial_investment_amounts):
     # This contribution will be added on to your current investment at the start of every month
     print("\nEnter 1 Number that you would like your Monthly Contribution to be WITHOUT Commas Ex: 1000")
     monthly_contribution = int(input("What is your Monthly Contribution? "))
+    financial_report.write(f"\nMonthly Contribution: ${monthly_contribution:,d}")
 
     # This will determine the amount of years that you want to invest your money
     print("\nPlease Enter a Whole Number and NOT a Decimal Ex: 5")
     time_frame_for_investment = int(input("How Many Years do you want to invest your money? "))
+    financial_report.write(f"\nTime Frame For Investment: {time_frame_for_investment} Years")
 
     # This will be the rate at which your money will be taxed at the end of each year
     print("\nPlease Enter a Number Without the Percentage Symbol Ex: 22 24.5 37 30.5 etc")
     tax_rate = float(input("Please enter you projected Tax Rate: "))
+    financial_report.write(f"\nTax Rate: %{tax_rate}")
 
     # Enter your Desired Weekly Rate of Returns Ex: 1 1.5 2 2.5 (Without the percent sign)
     print("\nInput the Weekly Rate of Return(s) as a Percentage --> Ex: 1 1.5 2 ")
     weekly_rate_of_returns_list = list(
         float(num) for num in input("Enter the Different Weekly Rate of Returns(s) separated by space ").split()
     )
+    financial_report.write(f"\nWeekly Rate Of Returns (Percentages): {weekly_rate_of_returns_list}")
 
     for each_percentage_weekly_rate_of_return in weekly_rate_of_returns_list:
         # This is done so that the user can enter a human-readable decimal like 1.5 instead of 1.015 or .015
@@ -324,29 +382,41 @@ def compound(brief_or_detailed, *initial_investment_amounts):
             initial_investment_for_brief_summary = current_capital
 
             # compounds the money by calling the compound_yearly function
-            compound_yearly(time_frame_for_investment, current_capital, tax_amount,
+            compound_yearly(financial_report, time_frame_for_investment, current_capital, tax_amount,
                             brief_or_detailed, monthly_contribution, weekly_rate_of_return,
                             initial_investment_for_brief_summary, tax_rate, each_percentage_weekly_rate_of_return)
 
 
 def main():
-    while True:
-        print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
-              "\nIf you want the Brief Summary Hit Enter or Press any Key")
-        brief_or_detailed_summary_answer = input("\nDo you want the Brief Summary or the Detailed Summary? ").lower()
+    try:
+        while True:
+            print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
+                  "\nIf you want the Brief Summary Hit Enter or Press any Key")
+            brief_or_detailed_summary_answer = input(
+                "\nDo you want the Brief Summary or the Detailed Summary? ").lower()
 
-        # need to figure out more information on why this worked and a for loop did not work for me to convert the
-        # strings from input() into integers but list comprehension did...?
-        print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
-        starting_capital = [int(string_num) for string_num in input("Enter the Starting Capital(s) "
-                                                                    "separated by space: ").split()]
+            print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
+            starting_capital = [int(string_num) for string_num in input("Enter the Starting Capital(s) "
+                                                                        "separated by space: ").split()]
 
-        compound(brief_or_detailed_summary_answer, starting_capital)
+            # only opens the brief or detailed file depending on the summary report the user chooses
+            if brief_or_detailed_summary_answer != 'd' and brief_or_detailed_summary_answer != 'detailed':
+                finance_report_brief = open('financial_investments_report_brief.txt', 'a')
+                finance_report_brief.write(f"\n\nStarting Capital(s): {starting_capital}")
+                compound(brief_or_detailed_summary_answer, finance_report_brief, starting_capital)
+                finance_report_brief.close()
+            else:
+                finance_report_detailed = open('financial_investments_report_detailed.txt', 'a')
+                finance_report_detailed.write(f"\nStarting Capital(s): {starting_capital}")
+                compound(brief_or_detailed_summary_answer, finance_report_detailed, starting_capital)
+                finance_report_detailed.close()
 
-        # Ask the user if they run the program to be re-ran
-        run_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
-        if run_again == 'no' or run_again == 'n':
-            break
+            # Ask the user if they run the program to be re-ran
+            run_program_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
+            if run_program_again == 'no' or run_program_again == 'n':
+                break
+    except:
+        print("Something happened with the file you tried to open")
 
 
 main()
