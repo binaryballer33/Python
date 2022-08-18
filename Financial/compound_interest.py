@@ -10,11 +10,12 @@ Calculator I used to verify my numbers:
     - according to https://www.thecalculatorsite.com/finance/calculators/compoundinterestcalculator.php
 """
 
-# *****************UPDATE************************
+# *****************UPDATES*********************************************************************************************
 # add a Total Profits for the year up to this Month variable: will probably be placed in the compound_monthly function
-# Need to implement Error handling throughout the script
+# Need to implement Error handling on the values being passed into the functions throughout the script
 # currently when using monthly contributions at the start of month there is a 2%-2.5% error in the calculation
-# according to https://www.thecalculatorsite.com/finance/calculators/compoundinterestcalculator.php
+# *****************UPDATES*********************************************************************************************
+
 
 from termcolor import colored
 
@@ -415,7 +416,7 @@ def main():
             run_program_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
             if run_program_again == 'no' or run_program_again == 'n':
                 break
-    except:
+    except IOError:
         print("Something happened with the file you tried to open")
 
 
