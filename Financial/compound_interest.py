@@ -1,4 +1,11 @@
 #!/usr/bin/python3
+
+# ************************************* Need To Implement Or Fix *******************************************************
+# add a Total Profits for the year up to this Month variable: will probably be placed in the compound_monthly function
+# currently when using monthly contributions at the start of month there is a 2%-2.5% error in the calculation
+# ************************************* Need To Implement Or Fix *******************************************************
+from termcolor import colored
+
 """
 This is an application that will calculate compound interest over a certain amount of time
 given certain interest rates, starting amounts, weekly rate of returns and your tax rate.
@@ -9,15 +16,6 @@ also I didn't think about it before I coded this :)
 Calculator I used to verify my numbers:
     - according to https://www.thecalculatorsite.com/finance/calculators/compoundinterestcalculator.php
 """
-
-# *****************UPDATES*********************************************************************************************
-# add a Total Profits for the year up to this Month variable: will probably be placed in the compound_monthly function
-# Need to implement Error handling on the values being passed into the functions throughout the script
-# currently when using monthly contributions at the start of month there is a 2%-2.5% error in the calculation
-# *****************UPDATES*********************************************************************************************
-
-
-from termcolor import colored
 
 
 def brief_summary(financial_report, years, net_realized_gains, total_capital, initial_investment_for_brief_summary,
@@ -335,14 +333,14 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
                     initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return, monthly_contribution)
 
 
-def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
+def compound(brief_or_detailed, financial_report, starting_capitals):
     """
     This function will figure out how much money you will make after a certain amount of time, will take into
     consideration how much money you started with and your interest rate every week, etc
 
     :param brief_or_detailed: string val that print brief summary or long summary, prints long summary by default
     :param financial_report: File object that this program will be appending text to
-    :param initial_investment_amounts: int list consisting of initial starting capitals
+    :param starting_capitals: int list consisting of initial starting capitals
     :return: None
     """
 
@@ -391,16 +389,13 @@ def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
 
     for each_percentage_weekly_rate_of_return in weekly_rate_of_returns_list:
         # This is done so that the user can enter a human-readable decimal like 1.5 instead of 1.015 or .015
-        # This is the only reason that this is done
         weekly_rate_of_return = each_percentage_weekly_rate_of_return / 100
 
-        # gets me the first element in the *args tuple data structure --> first and only element is a list
-        starting_capitals_list = initial_investment_amounts[0]
-        # gets me the first element in the list --> these are my starting capitals
-        for current_capital in starting_capitals_list:
+        # loop through all the starting capital values that were requested from the user input
+        for current_capital in starting_capitals:
             # resets tax amount each time you get a new starting value from the starting_capitals_list
             tax_amount = 0
-            # for brief_summary can keep track of initial inv
+            # for brief_summary can keep track of initial investment
             initial_investment_for_brief_summary = current_capital
 
             # compounds the money by calling the compound_yearly function
@@ -415,16 +410,19 @@ def main():
               "\nIf you want the Brief Summary Hit Enter or Press any Key"
         )
 
-        brief_or_detailed_summary_answer = input(
-            "\nDo you want the Brief Summary or the Detailed Summary? "
-        ).lower()
+        brief_or_detailed_summary_answer = input("\nDo you want the Brief Summary or the Detailed Summary? ").lower()
 
-        # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-        print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
-        starting_capital = [
-            int(string_num) for string_num in input(
-                "Enter the Starting Capital(s) separated by space: ").split()
-        ]
+        # validating the input here, verifying that all the starting capital values are integers
+        while True:
+            try:
+                print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
+                starting_capital = [
+                    int(string_num) for string_num in input(
+                        "Enter the Starting Capital(s) separated by space: ").split()
+                ]
+                break
+            except ValueError:
+                print("\nPlease Only Enter 1 Or More Number(s) Separated By Space, No Strings Are Allowed")
 
         # possibility of getting a IOError when trying to open or close the files
         try:
@@ -440,9 +438,9 @@ def main():
                 compound(brief_or_detailed_summary_answer, finance_report_detailed, starting_capital)
                 finance_report_detailed.close()
         except IOError:
-            print("Something happened with the file you tried to open")
+            print("Error With Opening Or Closing The financial_investments_report.txt File")
 
-        # Ask the user if they run the program to be re-ran
+        # Ask the user if they run the program to be re-ran, if the answer is no, break out of the while loop
         run_program_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
         if run_program_again == 'no' or run_program_again == 'n':
             break
