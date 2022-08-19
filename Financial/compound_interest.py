@@ -346,21 +346,25 @@ def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
     :return: None
     """
 
+    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
     # This contribution will be added on to your current investment at the start of every month
     print("\nEnter 1 Number that you would like your Monthly Contribution to be WITHOUT Commas Ex: 1000")
     monthly_contribution = int(input("What is your Monthly Contribution? "))
     financial_report.write(f"\nMonthly Contribution: ${monthly_contribution:,d}")
 
+    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
     # This will determine the amount of years that you want to invest your money
     print("\nPlease Enter a Whole Number and NOT a Decimal Ex: 5")
     time_frame_for_investment = int(input("How Many Years do you want to invest your money? "))
     financial_report.write(f"\nTime Frame For Investment: {time_frame_for_investment} Years")
 
+    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
     # This will be the rate at which your money will be taxed at the end of each year
     print("\nPlease Enter a Number Without the Percentage Symbol Ex: 22 24.5 37 30.5 etc")
     tax_rate = float(input("Please enter you projected Tax Rate: "))
     financial_report.write(f"\nTax Rate: %{tax_rate}")
 
+    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
     # Enter your Desired Weekly Rate of Returns Ex: 1 1.5 2 2.5 (Without the percent sign)
     print("\nInput the Weekly Rate of Return(s) as a Percentage --> Ex: 1 1.5 2 ")
     weekly_rate_of_returns_list = list(
@@ -392,13 +396,19 @@ def main():
     try:
         while True:
             print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
-                  "\nIf you want the Brief Summary Hit Enter or Press any Key")
-            brief_or_detailed_summary_answer = input(
-                "\nDo you want the Brief Summary or the Detailed Summary? ").lower()
+                  "\nIf you want the Brief Summary Hit Enter or Press any Key"
+            )
 
+            brief_or_detailed_summary_answer = input(
+                "\nDo you want the Brief Summary or the Detailed Summary? "
+            ).lower()
+
+            # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
             print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
-            starting_capital = [int(string_num) for string_num in input("Enter the Starting Capital(s) "
-                                                                        "separated by space: ").split()]
+            starting_capital = [
+                int(string_num) for string_num in input(
+                    "Enter the Starting Capital(s) separated by space: ").split()
+            ]
 
             # only opens the brief or detailed file depending on the summary report the user chooses
             if brief_or_detailed_summary_answer != 'd' and brief_or_detailed_summary_answer != 'detailed':
