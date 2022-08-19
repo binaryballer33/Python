@@ -410,23 +410,24 @@ def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
 
 
 def main():
-    try:
-        while True:
-            print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
-                  "\nIf you want the Brief Summary Hit Enter or Press any Key"
-            )
+    while True:
+        print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
+              "\nIf you want the Brief Summary Hit Enter or Press any Key"
+        )
 
-            brief_or_detailed_summary_answer = input(
-                "\nDo you want the Brief Summary or the Detailed Summary? "
-            ).lower()
+        brief_or_detailed_summary_answer = input(
+            "\nDo you want the Brief Summary or the Detailed Summary? "
+        ).lower()
 
-            # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-            print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
-            starting_capital = [
-                int(string_num) for string_num in input(
-                    "Enter the Starting Capital(s) separated by space: ").split()
-            ]
+        # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
+        print("\nDo not use commas when entering your Desired Starting Capital(s) Ex: 10000 15000 20000 etc")
+        starting_capital = [
+            int(string_num) for string_num in input(
+                "Enter the Starting Capital(s) separated by space: ").split()
+        ]
 
+        # possibility of getting a IOError when trying to open or close the files
+        try:
             # only opens the brief or detailed file depending on the summary report the user chooses
             if brief_or_detailed_summary_answer != 'd' and brief_or_detailed_summary_answer != 'detailed':
                 finance_report_brief = open('financial_investments_report_brief.txt', 'a')
@@ -438,13 +439,13 @@ def main():
                 finance_report_detailed.write(f"\nStarting Capital(s): {starting_capital}")
                 compound(brief_or_detailed_summary_answer, finance_report_detailed, starting_capital)
                 finance_report_detailed.close()
+        except IOError:
+            print("Something happened with the file you tried to open")
 
-            # Ask the user if they run the program to be re-ran
-            run_program_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
-            if run_program_again == 'no' or run_program_again == 'n':
-                break
-    except IOError:
-        print("Something happened with the file you tried to open")
+        # Ask the user if they run the program to be re-ran
+        run_program_again = input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
+        if run_program_again == 'no' or run_program_again == 'n':
+            break
 
 
 main()
