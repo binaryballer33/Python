@@ -346,30 +346,47 @@ def compound(brief_or_detailed, financial_report, *initial_investment_amounts):
     :return: None
     """
 
-    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-    # This contribution will be added on to your current investment at the start of every month
-    print("\nEnter 1 Number that you would like your Monthly Contribution to be WITHOUT Commas Ex: 1000")
-    monthly_contribution = int(input("What is your Monthly Contribution? "))
+    # user input validation for all the prompts, this will validate the input for:
+    # monthly_contribution, time_frame_for_investment, tax_rate & weekly_rate_of_returns_list
+    while True:
+        try:
+            # This contribution will be added on to your current investment at the start of every month
+            print("\nEnter 1 Number that you would like your Monthly Contribution to be WITHOUT Commas Ex: 1000")
+            monthly_contribution = int(input("What is your Monthly Contribution? "))
+            break
+        except ValueError:
+            print("\nPlease Only Enter A Singular Number, No Strings Are Allowed")
+    while True:
+        try:
+            # This will determine the amount of years that you want to invest your money
+            print("\nPlease Enter a Whole Number and NOT a Decimal Ex: 5")
+            time_frame_for_investment = int(input("How Many Years do you want to invest your money? "))
+            break
+        except ValueError:
+            print("\nPlease Only Enter A Singular Number, No Strings Are Allowed")
+    while True:
+        try:
+            # This will be the rate at which your money will be taxed at the end of each year
+            print("\nPlease Enter a Number Without the Percentage Symbol Ex: 22 24.5 37 30.5 etc")
+            tax_rate = float(input("Please enter you projected Tax Rate: "))
+            break
+        except ValueError:
+            print("\nPlease Only Enter A Number or Decimal, No Strings Are Allowed")
+    while True:
+        try:
+            # Enter your Desired Weekly Rate of Returns Ex: 1 1.5 2 2.5 (Without the percent sign)
+            print("\nInput the Weekly Rate of Return(s) as a Percentage --> Ex: 1 1.5 2 ")
+            weekly_rate_of_returns_list = list(
+                float(num) for num in input("Enter the Different Weekly Rate of Returns(s) separated by space ").split()
+            )
+            break
+        except ValueError:
+            print("\nPlease Only Enter Number(s) or Decimal(s), No Strings Are Allowed")
+
+    # after getting all the values and verifying that they are accurate, write once to the file
     financial_report.write(f"\nMonthly Contribution: ${monthly_contribution:,d}")
-
-    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-    # This will determine the amount of years that you want to invest your money
-    print("\nPlease Enter a Whole Number and NOT a Decimal Ex: 5")
-    time_frame_for_investment = int(input("How Many Years do you want to invest your money? "))
     financial_report.write(f"\nTime Frame For Investment: {time_frame_for_investment} Years")
-
-    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-    # This will be the rate at which your money will be taxed at the end of each year
-    print("\nPlease Enter a Number Without the Percentage Symbol Ex: 22 24.5 37 30.5 etc")
-    tax_rate = float(input("Please enter you projected Tax Rate: "))
     financial_report.write(f"\nTax Rate: %{tax_rate}")
-
-    # TODO start fixing input validation here, do error handling, CODE WILL BREAK HERE IF STR IS ENTERED!!!
-    # Enter your Desired Weekly Rate of Returns Ex: 1 1.5 2 2.5 (Without the percent sign)
-    print("\nInput the Weekly Rate of Return(s) as a Percentage --> Ex: 1 1.5 2 ")
-    weekly_rate_of_returns_list = list(
-        float(num) for num in input("Enter the Different Weekly Rate of Returns(s) separated by space ").split()
-    )
     financial_report.write(f"\nWeekly Rate Of Returns (Percentages): {weekly_rate_of_returns_list}")
 
     for each_percentage_weekly_rate_of_return in weekly_rate_of_returns_list:
