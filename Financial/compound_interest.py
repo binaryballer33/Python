@@ -101,7 +101,7 @@ def user_input_validation():
 
 
 def brief_summary(financial_report, years, net_realized_gains, total_capital,
-                  initial_investment_for_brief_summary, weekly_rate_of_return,
+                  initial_investment, weekly_rate_of_return,
                   monthly_contribution, tax_rate):
     """
     Displays a less detailed Summary report of your investments, Displays these values:
@@ -119,7 +119,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     :param total_capital: int value for the total amount of money that
     you contributed over the length of the investment
 
-    :param initial_investment_for_brief_summary: integer value for
+    :param initial_investment: integer value for
     tracking the actual initial investment
 
     :param weekly_rate_of_return: float value that
@@ -147,7 +147,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     # Prints the Net Summary Report information for the year
     print(f"\nPrinting Summary Report For Year {years + 1}")
     print("**********NET SUMMARY************************")
-    print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
+    print(f"Initial Investment: ${initial_investment:,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
     print(f"Weekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%")
     print(f"Tax Rate: {tax_rate}%")
@@ -161,7 +161,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     # write all of this output to the financial_investments_report_brief.txt file
     financial_report.write(f"\n\nPrinting Summary Report For Year {years + 1}")
     financial_report.write("\n**********NET SUMMARY************************")
-    financial_report.write(f"\nInitial Investment: ${initial_investment_for_brief_summary:,d}")
+    financial_report.write(f"\nInitial Investment: ${initial_investment:,d}")
     financial_report.write(f"\nAdditional Monthly Contribution: ${monthly_contribution:,d}")
     financial_report.write(
         f"\nWeekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%"
@@ -177,7 +177,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
 
 def summary(financial_report, years, start_of_the_year_capital, total_capital,
             net_realized_gains, tax_rate, ending_capital, total_profits_current_year,
-            tax_amount, total_profits_all_time, initial_investment_for_brief_summary,
+            tax_amount, total_profits_all_time, initial_investment,
             weekly_rate_of_return, monthly_contribution):
     """
     Display a Summary report of your investments,
@@ -210,7 +210,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     :param total_profits_all_time: int value that stores the value
      for the total profits you made on the investment
 
-    :param initial_investment_for_brief_summary:
+    :param initial_investment:
     integer value for tracking the actual initial investment
 
     :param weekly_rate_of_return: float value
@@ -249,7 +249,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     # Prints the Gross Summary information for the year
     print(f"\nPrinting Summary Report For Year {years + 1}")
     print("**********GROSS SUMMARY**********************")
-    print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
+    print(f"Initial Investment: ${initial_investment:,d}")
     print(f"Start Of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
     print(f"Weekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%")
@@ -262,7 +262,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     # write all the Gross Summary Information to the financial_investments_report_detailed.txt file
     financial_report.write(f"\n\nPrinting Summary Report For Year {years + 1}")
     financial_report.write("\n**********GROSS SUMMARY**********************")
-    financial_report.write(f"\nInitial Investment: ${initial_investment_for_brief_summary:,d}")
+    financial_report.write(f"\nInitial Investment: ${initial_investment:,d}")
     financial_report.write(
         f"\nStart Of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}"
     )
@@ -431,7 +431,7 @@ def compound_monthly(financial_report, current_capital, monthly_contribution,
 
 def compound_yearly(financial_report, time_frame_for_investment, current_capital,
                     tax_amount, brief_or_detailed, monthly_contribution, weekly_rate_of_return,
-                    initial_investment_for_brief_summary, tax_rate):
+                    tax_rate):
     """
     compound_yearly function will run for each year that you want to invest your money
 
@@ -455,9 +455,6 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
     :param weekly_rate_of_return: float value weekly rate of return
      after it has been divided by 100 Ex: .015 = 1.5%
 
-    :param initial_investment_for_brief_summary: integer value
-     for tracking the actual initial investment
-
     :param tax_rate: float value that represent tax rate
      at the end of the year
 
@@ -466,6 +463,9 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
 
     :return: None
     """
+
+    # for brief_summary can keep track of initial investment
+    initial_investment = current_capital
 
     # This specifies how many years you will be investing your money
     for years in range(time_frame_for_investment):
@@ -489,9 +489,10 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
         # total profits for the current year
         total_profits_current_year = \
             current_capital - start_of_the_year_capital - monthly_contribution * 12
+
         # total amount of your own contribution
         total_capital = \
-            initial_investment_for_brief_summary + monthly_contribution * 12 * (years + 1)
+            initial_investment + monthly_contribution * 12 * (years + 1)
 
         # This will be the tax amount that you will pay at the end of each year
         tax_amount = total_profits_current_year * (tax_rate / 100)
@@ -509,7 +510,7 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
                 and brief_or_detailed != 'detailed' and brief_or_detailed != 'd':
             brief_summary(
                 financial_report, years, net_realized_gains, total_capital,
-                initial_investment_for_brief_summary, weekly_rate_of_return,
+                initial_investment, weekly_rate_of_return,
                 monthly_contribution, tax_rate
             )
         elif 'detailed' not in brief_or_detailed and 'd' not in brief_or_detailed:
@@ -520,7 +521,7 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
             summary(
                 financial_report, years, start_of_the_year_capital, total_capital,
                 net_realized_gains, tax_rate, ending_capital, total_profits_current_year,
-                tax_amount, total_profits_all_time, initial_investment_for_brief_summary,
+                tax_amount, total_profits_all_time, initial_investment,
                 weekly_rate_of_return, monthly_contribution
             )
 
@@ -560,14 +561,12 @@ def compound(brief_or_detailed, financial_report):
             # resets tax amount each time you get a new starting value
             # from the starting_capitals list
             tax_amount = 0
-            # for brief_summary can keep track of initial investment
-            initial_investment_for_brief_summary = current_capital
 
             # compounds the money by calling the compound_yearly function
             compound_yearly(
-                financial_report, time_frame_for_investment, current_capital,
-                tax_amount, brief_or_detailed, monthly_contribution, weekly_rate_of_return,
-                initial_investment_for_brief_summary, tax_rate
+                financial_report, time_frame_for_investment,
+                current_capital, tax_amount, brief_or_detailed,
+                monthly_contribution, weekly_rate_of_return, tax_rate
             )
 
 
