@@ -388,17 +388,18 @@ def compound_monthly(financial_report, current_capital, monthly_contribution,
     that you have after a month of investing
     """
 
-    months_of_the_year = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                          'August', 'September', 'October', 'November', 'December']
+    months_of_the_year = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
+                          'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
 
     # loops through each month of the year
     for each_month in months_of_the_year:
+        # first thing, add the monthly contribution before doing any other math
         current_capital = current_capital + monthly_contribution
 
         if 'detailed' in brief_or_detailed or 'd' in brief_or_detailed:
-            print(f"\n\t\tYEAR {years + 1} {each_month.upper()}")
+            print(f"\n\t\tYEAR {years + 1} {each_month}")
             print(f"Adding Monthly Contribution: [+] ${monthly_contribution:,d}")
-            financial_report.write(f"\n\n\t\tYEAR {years + 1} {each_month.upper()}")
+            financial_report.write(f"\n\n\t\tYEAR {years + 1} {each_month}")
             financial_report.write(
                 f"\nAdding Monthly Contribution: [+] ${monthly_contribution:,d}"
             )
