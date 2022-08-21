@@ -24,25 +24,20 @@ def user_input_validation():
     it off to the other functions to do their calculations
     """
     # user input validation for all the prompts, this will validate the input for:
-    # monthly_contribution, time_frame_for_investment, tax_rate & weekly_rate_of_returns_list
+    # starting_capitals, monthly_contribution, time_frame_for_investment,
+    # tax_rate & weekly_rate_of_returns_list
 
-    # validating the input here, verifying that all the starting capital values are integers
     while True:
         try:
-            print("\nDo Not Use Commas When Entering Your "
-                  "Desired Starting Capital(s) Ex: 10000 15000 20000 etc"
-                  )
+            print("\nPlease Enter 1 Or More Number(s) Separated By Space Ex: 10000 15000 20000")
             starting_capitals = [
                 int(string_num) for string_num in input(
-                    "Enter the Starting Capital(s) Separated By Space: ").split()
+                    "Enter The Starting Capital(s) Separated By Space: ").split()
             ]
             # if starting capital == None because you hit enter, keep asking into you get good data
-            # figure out how to add this conditional to the list comprehension statement
-            while not starting_capitals:
-                starting_capitals = [
-                    int(string_num) for string_num in input(
-                        "Enter the Starting Capital(s) Separated By Space: ").split()
-                ]
+            if not starting_capitals:
+                print("\nYou Have To Enter At Least 1 Value For Starting Capital(s)")
+                continue
             break
         except ValueError:
             print("\nPlease Only Enter 1 Or More Number(s)"
@@ -56,7 +51,7 @@ def user_input_validation():
             print("\nEnter 1 Number That You Would Like Your Monthly Contribution"
                   " To Be WITHOUT Commas Ex: 1000"
             )
-            monthly_contribution = int(input("What is your Monthly Contribution? "))
+            monthly_contribution = int(input("What Is Your Monthly Contribution? "))
             break
         except ValueError:
             print("\nPlease Only Enter A Singular Number, No Strings Are Allowed")
@@ -64,9 +59,9 @@ def user_input_validation():
     while True:
         try:
             # This will determine the amount of years that you want to invest your money
-            print("\nPlease Enter a Whole Number and NOT a Decimal Ex: 5")
+            print("\nPlease Enter 1 Whole Number And NOT A Decimal Ex: 5")
             time_frame_for_investment = \
-                int(input("How Many Years do you want to invest your money? "))
+                int(input("How Many Years Do You Want To Invest Your Money? "))
             break
         except ValueError:
             print("\nPlease Only Enter A Singular Number, No Strings Are Allowed")
@@ -74,8 +69,9 @@ def user_input_validation():
     while True:
         try:
             # This will be the rate at which your money will be taxed at the end of each year
-            print("\nPlease Enter a Number Without the Percentage Symbol Ex: 22 24.5 37 30.5 etc")
-            tax_rate = float(input("Please enter you projected Tax Rate: "))
+            print("\nPlease Enter 1 Number Without The % Symbol, You Can Also Enter A Decimal "
+                  "Tax Rate Ex: 10 12 22 24 32 35 37 50.51")
+            tax_rate = float(input("Please Enter Your Projected Tax Rate: "))
             break
         except ValueError:
             print("\nPlease Only Enter A Number or Decimal, No Strings Are Allowed")
@@ -88,6 +84,11 @@ def user_input_validation():
                 float(num) for num in
                 input("Enter the Different Weekly Rate of Returns(s) separated by space ").split()
             )
+            # if weekly_rate_of_returns_list == None because you hit enter,
+            # keep asking into you get good data
+            if not weekly_rate_of_returns_list:
+                print("\nYou Have To Enter At Least 1 Value For The Weekly Rate Of Return")
+                continue
             break
         except ValueError:
             print("\nPlease Only Enter Number(s) or Decimal(s), No Strings Are Allowed")
@@ -109,30 +110,38 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     period of your investment
 
     :param financial_report: File object that this program will be appending text to
+
     :param years: integer value that represents how many years you invested the money
+
     :param net_realized_gains: int value for the net profits at the
     end of the investment period
+
     :param total_capital: int value for the total amount of money that
     you contributed over the length of the investment
+
     :param initial_investment_for_brief_summary: integer value for
     tracking the actual initial investment
+
     :param each_percentage_weekly_rate_of_return: float value that
     determines your weekly return each week
+
     :param monthly_contribution: integer value that represents monthly contribution to investment
+
     :param tax_rate: float value that represent tax rate at the end of the year
+
     :return: None
 
 
-                    Example Output:
-                    **********NET SUMMARY************************
-                        Initial Investment: $1,000
-                        Additional Monthly Contribution: $1,000
-                        Weekly Rate Of Return: 1.5%
-                        Tax Rate: 37.0%
-                        Net Investment: $289,233
-                        Total Contributions To Date: $61,000
-                        289,233 / 61,000 = (4.74X Return)
-                    **********NET SUMMARY************************
+            Printing Summary Report For Year 3
+            **********NET SUMMARY************************
+            Initial Investment: $100,000
+            Additional Monthly Contribution: $8,334
+            Weekly Rate Of Return: 1.25%
+            Tax Rate: 33.0%
+            Net Investment: $1,100,145
+            Total Contributions To Date: $400,024
+            1,100,145 / 400,024 = (2.75X Return)
+            **********NET SUMMARY************************
     """
 
     # Prints the Net Summary Report information for the year
@@ -355,7 +364,7 @@ def compound_weekly(financial_report, current_capital, weekly_profits_of_the_mon
 
 
 def compound_monthly(financial_report, current_capital, monthly_contribution,
-                     brief_or_detailed, months_of_the_year, years, weekly_rate_of_return):
+                     brief_or_detailed, years, weekly_rate_of_return):
     """
     compound_monthly function will run for each month in the year
     that you want to invest your money
@@ -370,15 +379,17 @@ def compound_monthly(financial_report, current_capital, monthly_contribution,
     :param brief_or_detailed: string value will be used throughout the
     script to determine what summary report to print
 
-    :param months_of_the_year: string list that holds all 12 months in a year
-
     :param years: int value that holds the value of the current year you are in
 
     :param weekly_rate_of_return: float value weekly rate of return
     after it has been divided by 100 Ex: .015 = 1.5%
 
-    :return: current_capital
+    :return: current_capital Holds the current amount of money
+    that you have after a month of investing
     """
+
+    months_of_the_year = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                          'August', 'September', 'October', 'November', 'December']
 
     # loops through each month of the year
     for each_month in months_of_the_year:
@@ -456,9 +467,6 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
     :return: None
     """
 
-    months_of_the_year = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-                          'August', 'September', 'October', 'November', 'December']
-
     # This specifies how many years you will be investing your money
     for years in range(time_frame_for_investment):
         # helps me keep track of the profits for just the current year
@@ -475,7 +483,7 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
 
         current_capital = compound_monthly(
             financial_report, current_capital, monthly_contribution,
-            brief_or_detailed, months_of_the_year, years, weekly_rate_of_return
+            brief_or_detailed, years, weekly_rate_of_return
         )
 
         # total profits for the current year
@@ -539,7 +547,7 @@ def compound(brief_or_detailed, financial_report):
     financial_report.write(f"\n\nStarting Capital(s): {starting_capitals}")
     financial_report.write(f"\nMonthly Contribution: ${monthly_contribution:,d}")
     financial_report.write(f"\nTime Frame For Investment: {time_frame_for_investment} Years")
-    financial_report.write(f"\nTax Rate: %{tax_rate}")
+    financial_report.write(f"\nTax Rate: {tax_rate}%")
     financial_report.write(f"\nWeekly Rate Of Returns (Percentages): {weekly_rate_of_returns_list}")
 
     for each_percentage_weekly_rate_of_return in weekly_rate_of_returns_list:
@@ -569,8 +577,8 @@ def main():
 
     while True:
         try:
-            print("\nIf you want the Detailed Summary type: 'detailed' or 'd' "
-                  "\nIf you want the Brief Summary Hit Enter or Press any Key"
+            print("\nIf You Want The Detailed Summary Type: 'detailed' or 'd' "
+                  "\nIf You Want The Brief Summary Press Any Other Key"
             )
 
             brief_or_detailed = \
@@ -600,11 +608,11 @@ def main():
             # Ask the user if they run the program to be re-ran,
             # if the answer is no, break out of the while loop
             run_program_again = \
-                input("\n\n\nDo you want to run another calculation? Enter Yes or No: ").lower()
+                input("\n\n\nDo You Want To Run Another Calculation? Enter Yes Or No: ").lower()
             if 'no' in run_program_again or 'n' in run_program_again:
                 break
         except KeyboardInterrupt:
-            print("\nThank You For Using Planning Out Your Investment Goals With Me, GoodBye :) !")
+            print("\nThank You For Planning Out Your Investment Goals With Me, GoodBye :)")
             break
 
 
