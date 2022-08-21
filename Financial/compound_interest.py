@@ -589,15 +589,15 @@ def main():
                 # summary report the user chooses
                 if 'd' not in brief_or_detailed \
                         and 'detailed' not in brief_or_detailed:
-                    financial_report = \
-                        open('financial_investments_report_brief.txt', 'a', encoding='UTF-8')
-                    compound(brief_or_detailed, financial_report)
-                    financial_report.close()
+                    with open(
+                            'financial_report_brief.txt', 'a', encoding='UTF-8'
+                    ) as financial_report:
+                        compound(brief_or_detailed, financial_report)
                 else:
-                    financial_report = \
-                        open('financial_investments_report_detailed.txt', 'a', encoding='UTF-8')
-                    compound(brief_or_detailed, financial_report)
-                    financial_report.close()
+                    with open(
+                            'financial_report_detailed.txt', 'a', encoding='UTF-8'
+                    ) as financial_report:
+                        compound(brief_or_detailed, financial_report)
             except IOError:
                 print("Error With Opening Or Closing The financial_investments_report.txt File")
                 break
