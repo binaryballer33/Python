@@ -25,7 +25,7 @@ def user_input_validation():
     """
     # user input validation for all the prompts, this will validate the input for:
     # starting_capitals, monthly_contribution, time_frame_for_investment,
-    # tax_rate & weekly_rate_of_returns_list
+    # tax_rate & weekly_rate_of_returns
 
     while True:
         try:
@@ -80,13 +80,13 @@ def user_input_validation():
         try:
             # Enter your Desired Weekly Rate of Returns Ex: 1 1.5 2 2.5 (Without the percent sign)
             print("\nInput the Weekly Rate of Return(s) as a Percentage --> Ex: 1 1.5 2 ")
-            weekly_rate_of_returns_list = list(
+            weekly_rate_of_returns = list(
                 float(num) for num in
                 input("Enter the Different Weekly Rate of Returns(s) separated by space ").split()
             )
-            # if weekly_rate_of_returns_list == None because you hit enter,
+            # if weekly_rate_of_returns == None because you hit enter,
             # keep asking into you get good data
-            if not weekly_rate_of_returns_list:
+            if not weekly_rate_of_returns:
                 print("\nYou Have To Enter At Least 1 Value For The Weekly Rate Of Return")
                 continue
             break
@@ -97,11 +97,11 @@ def user_input_validation():
     return \
         starting_capitals, monthly_contribution,\
         time_frame_for_investment, tax_rate,\
-        weekly_rate_of_returns_list
+        weekly_rate_of_returns
 
 
 def brief_summary(financial_report, years, net_realized_gains, total_capital,
-                  initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return,
+                  initial_investment_for_brief_summary, weekly_rate_of_return,
                   monthly_contribution, tax_rate):
     """
     Displays a less detailed Summary report of your investments, Displays these values:
@@ -122,7 +122,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     :param initial_investment_for_brief_summary: integer value for
     tracking the actual initial investment
 
-    :param each_percentage_weekly_rate_of_return: float value that
+    :param weekly_rate_of_return: float value that
     determines your weekly return each week
 
     :param monthly_contribution: integer value that represents monthly contribution to investment
@@ -149,7 +149,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     print("**********NET SUMMARY************************")
     print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
-    print(f"Weekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%")
+    print(f"Weekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%")
     print(f"Tax Rate: {tax_rate}%")
     print(f"{colored('Net Investment:', 'green')} ${int(net_realized_gains):,d}")
     print(f"Total Contributions To Date: ${total_capital:,d}")
@@ -164,7 +164,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
     financial_report.write(f"\nInitial Investment: ${initial_investment_for_brief_summary:,d}")
     financial_report.write(f"\nAdditional Monthly Contribution: ${monthly_contribution:,d}")
     financial_report.write(
-        f"\nWeekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%"
+        f"\nWeekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%"
     )
     financial_report.write(f"\nTax Rate: {tax_rate}%")
     financial_report.write(f"\nNet Investment: ${int(net_realized_gains):,d}")
@@ -178,7 +178,7 @@ def brief_summary(financial_report, years, net_realized_gains, total_capital,
 def summary(financial_report, years, start_of_the_year_capital, total_capital,
             net_realized_gains, tax_rate, ending_capital, total_profits_current_year,
             tax_amount, total_profits_all_time, initial_investment_for_brief_summary,
-            each_percentage_weekly_rate_of_return, monthly_contribution):
+            weekly_rate_of_return, monthly_contribution):
     """
     Display a Summary report of your investments,
     takes in the variable as parameters from your compound() function
@@ -213,7 +213,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     :param initial_investment_for_brief_summary:
     integer value for tracking the actual initial investment
 
-    :param each_percentage_weekly_rate_of_return: float value
+    :param weekly_rate_of_return: float value
     that shows the human-readable % value Ex: 1.5% not .015
 
     :param monthly_contribution: integer value that represents monthly contribution to investment
@@ -252,7 +252,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     print(f"Initial Investment: ${initial_investment_for_brief_summary:,d}")
     print(f"Start Of Year {years + 1} Investment: ${int(start_of_the_year_capital):,d}")
     print(f"Additional Monthly Contribution: ${monthly_contribution:,d}")
-    print(f"Weekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%")
+    print(f"Weekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%")
     print(f"{colored('Profits For The Year: ', 'green')}${int(total_profits_current_year):,d}")
     print(f"{colored('Ending Investment: ', 'green')}${int(ending_capital):,d}")
     print(f"${round(ending_capital):,d} / ${round(total_capital):,d} = "
@@ -268,7 +268,7 @@ def summary(financial_report, years, start_of_the_year_capital, total_capital,
     )
     financial_report.write(f"\nAdditional Monthly Contribution: ${monthly_contribution:,d}")
     financial_report.write(
-        f"\nWeekly Rate Of Return: {round(each_percentage_weekly_rate_of_return, 2)}%"
+        f"\nWeekly Rate Of Return: {round(weekly_rate_of_return * 100, 2)}%"
     )
     financial_report.write(f"\nProfits for The Year: ${int(total_profits_current_year):,d}")
     financial_report.write(f"\nEnding Investment: ${int(ending_capital):,d}")
@@ -321,8 +321,8 @@ def compound_weekly(financial_report, current_capital, weekly_profits_of_the_mon
 
     :param weekly_rate_of_return: Enter a float value for your weekly rate of return
 
-    :param brief_or_detailed: displays the print statements in the function
-     if you choose detail, else it doesn't
+    :param brief_or_detailed: string val that prints a brief summary or long summary
+    depending on what the user selected
 
     :return: current_capital Holds the current amount of money
     that you have after a month of investing
@@ -376,8 +376,8 @@ def compound_monthly(financial_report, current_capital, monthly_contribution,
 
     :param monthly_contribution: integer value that represents monthly contribution to investment
 
-    :param brief_or_detailed: string value will be used throughout the
-    script to determine what summary report to print
+    :param brief_or_detailed: string val that prints a brief summary or long summary
+    depending on what the user selected
 
     :param years: int value that holds the value of the current year you are in
 
@@ -430,8 +430,7 @@ def compound_monthly(financial_report, current_capital, monthly_contribution,
 
 def compound_yearly(financial_report, time_frame_for_investment, current_capital,
                     tax_amount, brief_or_detailed, monthly_contribution, weekly_rate_of_return,
-                    initial_investment_for_brief_summary, tax_rate,
-                    each_percentage_weekly_rate_of_return, ):
+                    initial_investment_for_brief_summary, tax_rate):
     """
     compound_yearly function will run for each year that you want to invest your money
 
@@ -446,8 +445,8 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
     :param tax_amount: int value that stores the value of the
     tax amount due at the end of each year
 
-    :param brief_or_detailed: string value will be used throughout
-    the script to determine what summary report to print
+    :param brief_or_detailed: string val that prints a brief summary or long summary
+    depending on what the user selected
 
     :param monthly_contribution: integer value that represents
     monthly contribution to investment
@@ -461,7 +460,7 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
     :param tax_rate: float value that represent tax rate
      at the end of the year
 
-    :param each_percentage_weekly_rate_of_return: float value that shows
+    :param weekly_rate_of_return: float value that shows
      the human-readable % value Ex: 1.5% not .015
 
     :return: None
@@ -509,7 +508,7 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
                 and brief_or_detailed != 'detailed' and brief_or_detailed != 'd':
             brief_summary(
                 financial_report, years, net_realized_gains, total_capital,
-                initial_investment_for_brief_summary, each_percentage_weekly_rate_of_return,
+                initial_investment_for_brief_summary, weekly_rate_of_return,
                 monthly_contribution, tax_rate
             )
         elif 'detailed' not in brief_or_detailed and 'd' not in brief_or_detailed:
@@ -521,18 +520,18 @@ def compound_yearly(financial_report, time_frame_for_investment, current_capital
                 financial_report, years, start_of_the_year_capital, total_capital,
                 net_realized_gains, tax_rate, ending_capital, total_profits_current_year,
                 tax_amount, total_profits_all_time, initial_investment_for_brief_summary,
-                each_percentage_weekly_rate_of_return, monthly_contribution
+                weekly_rate_of_return, monthly_contribution
             )
 
 
 def compound(brief_or_detailed, financial_report):
     """
-    This function will figure out how much money you will make
-    after a certain amount of time, will take into
-    consideration how much money you started with and your interest rate every week, etc
+    This function will call compound_yearly and pass over all the needed values over.
+    The for loop will run x amount of times depending on how many values
+    the user entered for starting_capitals and weekly_rate_of_returns
 
-    :param brief_or_detailed: string val that print brief summary or long summary,
-     prints long summary by default
+    :param brief_or_detailed: string val that prints a brief summary or long summary
+    depending on what the user selected
 
     :param financial_report: File object that this program will be appending text to
 
@@ -541,24 +540,24 @@ def compound(brief_or_detailed, financial_report):
 
     # get all the correct input from the user using the user_input_validation function
     starting_capitals, monthly_contribution,\
-        time_frame_for_investment, tax_rate, weekly_rate_of_returns_list = user_input_validation()
+        time_frame_for_investment, tax_rate, weekly_rate_of_returns = user_input_validation()
 
     # after getting all the values and verifying that they are accurate, write once to the file
     financial_report.write(f"\n\nStarting Capital(s): {starting_capitals}")
     financial_report.write(f"\nMonthly Contribution: ${monthly_contribution:,d}")
     financial_report.write(f"\nTime Frame For Investment: {time_frame_for_investment} Years")
     financial_report.write(f"\nTax Rate: {tax_rate}%")
-    financial_report.write(f"\nWeekly Rate Of Returns (Percentages): {weekly_rate_of_returns_list}")
+    financial_report.write(f"\nWeekly Rate Of Returns (Percentages): {weekly_rate_of_returns}")
 
-    for each_percentage_weekly_rate_of_return in weekly_rate_of_returns_list:
+    for weekly_rate_of_return in weekly_rate_of_returns:
         # This is done so that the user can enter a human-readable decimal
         # like 1.5 instead of 1.015 or .015
-        weekly_rate_of_return = each_percentage_weekly_rate_of_return / 100
+        weekly_rate_of_return = weekly_rate_of_return / 100
 
         # loop through all the starting capital values that were requested from the user input
         for current_capital in starting_capitals:
             # resets tax amount each time you get a new starting value
-            # from the starting_capitals_list
+            # from the starting_capitals list
             tax_amount = 0
             # for brief_summary can keep track of initial investment
             initial_investment_for_brief_summary = current_capital
@@ -567,8 +566,7 @@ def compound(brief_or_detailed, financial_report):
             compound_yearly(
                 financial_report, time_frame_for_investment, current_capital,
                 tax_amount, brief_or_detailed, monthly_contribution, weekly_rate_of_return,
-                initial_investment_for_brief_summary, tax_rate,
-                each_percentage_weekly_rate_of_return
+                initial_investment_for_brief_summary, tax_rate
             )
 
 
