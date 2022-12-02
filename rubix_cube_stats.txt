@@ -1,0 +1,28 @@
+====================================================================================================
+Rubix Cube Stats:
+		Today is Thrusday December 1st, 2022
+		This information is based on 25 solves:
+		Your Average time is: 15.92 seconds
+		You solve the rubix's cube in 14 seconds the most
+		The Sum of all your solves is: 398
+
+		Your average solve time for the last 3 solves is: 16.0
+		Your average solve time for the last 5 solves is: 16.0
+		Your average solve time for the last 10 solves is: 15.9
+		Your average solve time for the last 20 solves is: 15.95
+		Your average solve time for the last 25 solves is: 15.92
+
+____________________________________________________________________________________________________
+		You solved the rubix cube in 12 seconds 1 times out of 25: 4.0%
+		You solved the rubix cube in 13 seconds 1 times out of 25: 4.0%
+		You solved the rubix cube in 14 seconds 5 times out of 25: 20.0%
+		You solved the rubix cube in 15 seconds 4 times out of 25: 16.0%
+		You solved the rubix cube in 16 seconds 5 times out of 25: 20.0%
+		You solved the rubix cube in 17 seconds 2 times out of 25: 8.0%
+		You solved the rubix cube in 18 seconds 4 times out of 25: 16.0%
+		You solved the rubix cube in 19 seconds 3 times out of 25: 12.0%
+====================================================================================================
+
+
+
+
