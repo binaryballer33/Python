@@ -36,7 +36,7 @@ def rubix_cube_stats(solve_times, date=datetime.datetime.today()):
     with open('rubix_cube_stats.txt', 'a', encoding='UTF-8') as rubix_cube_stats_report:
         print("=" * 100)
         print("Rubix Cube Stats:")
-        print(f'\t\tToday is {date} yyyy-mm-dd: hh:mm:sec:ms')
+        print(f'\t\tToday is {date}')
         rubix_cube_stats_report.write("=" * 100)
         rubix_cube_stats_report.write("\n")
         rubix_cube_stats_report.write("Rubix Cube Stats:\n")
@@ -76,14 +76,12 @@ def rubix_cube_stats(solve_times, date=datetime.datetime.today()):
         # Prints out the solve and how many times you solved it in that amount of time
         # Only prints out the solve if it's in the list, if you never solved it in 10 seconds 10 won't be printed out
         # Example: You solved the rubix cube in 16 seconds 2 times
-        starter_count = 5
         for each_rubix_completion in range(5, 61):
             if each_rubix_completion in solve_times:
-                print(f'\t\tYou solved the rubix cube in {each_rubix_completion} seconds {solve_times.count(starter_count)} times out of {amount_of_solves}: {(solve_times.count(starter_count) / amount_of_solves) * 100 }%')
-                rubix_cube_stats_report.write(f'\t\tYou solved the rubix cube in {each_rubix_completion} seconds {solve_times.count(starter_count)} times out of {amount_of_solves}: {(solve_times.count(starter_count) / amount_of_solves) * 100 }%\n')
-                starter_count += 1
-            else:
-                starter_count += 1
+                print(f'\t\tYou solved the rubix cube in {each_rubix_completion} seconds {solve_times.count(each_rubix_completion)} times out of {amount_of_solves}: {(solve_times.count(each_rubix_completion) / amount_of_solves) * 100 }%')
+                rubix_cube_stats_report.write(f'\t\tYou solved the rubix cube in {each_rubix_completion} seconds {solve_times.count(each_rubix_completion)} times out of {amount_of_solves}: {(solve_times.count(each_rubix_completion) / amount_of_solves) * 100 }%\n')
+            
+
 
         print("=" * 100)
         rubix_cube_stats_report.write("=" * 100 + "\n\n\n\n\n")
@@ -104,5 +102,7 @@ def random_list_generator(): # generates a random list
 # solves = [19, 16, 24, 18, 19, 20, 21, 24, 20, 17, 16, 20, 19, 23, 19, 22, 17, 16, 17, 20, 19, 18, 21, 17, 23, 17, 20, 17, 22, 19]
 # rubix_cube_stats(solves, 'March 30th, 2020)
 
-rubix_cube_stats([12, 18, 14, 19, 16, 18, 18, 14, 16, 19, 14, 15, 15, 14, 17, 13, 19, 16, 16, 15, 14, 18, 16, 15, 17], "Thrusday December 1st, 2022")
+# rubix_cube_stats([12, 18, 14, 19, 16, 18, 18, 14, 16, 19, 14, 15, 15, 14, 17, 13, 19, 16, 16, 15, 14, 18, 16, 15, 17], "Thrusday December 1st, 2022")
+# rubix_cube_stats([16, 16, 16, 18, 17, 19, 17, 19, 18, 15, 19, 18, 19, 17, 16, 14, 18, 18, 16, 18, 18, 15, 18, 18, 19, 16], "Thrusday December 1st, 2022")
+rubix_cube_stats([15, 19, 19, 17, 17, 17, 18, 17, 14, 16, 17, 17, 17, 21, 19, 18, 18, 14, 15, 18, 15, 16, 16, 15, 16, 16, 16], "Thrusday December 1st, 2022")
 
